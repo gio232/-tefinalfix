@@ -13,11 +13,20 @@ async function loadBlogPosts() {
     const lang = window.currentLang || localStorage.getItem('scosag_lang') || 'ru';
     console.log('Loading blog posts for language:', lang);
 
-    // Fetch posts from static JSON file
-    const response = await fetch('/posts-data.json');
-    const data = await response.json();
+    // Fetch posts from static JSON file or localStorage
+    let data = null;
+    try {
+      const response = await fetch('./posts-data.json');
+      data = await response.json();
+    } catch(err) {
+      console.warn('Failed to fetch posts-data.json, checking localStorage fallback');
+      const localPosts = localStorage.getItem('scosag_posts');
+      if (localPosts) {
+        data = { success: true, data: JSON.parse(localPosts) };
+      }
+    }
 
-    if (data.success && data.data && data.data.length > 0) {
+    if (data && data.success && data.data && data.data.length > 0) {
       // Filter by language and published status
       const filteredPosts = data.data.filter(p => p.lang === lang && p.published);
 
@@ -45,9 +54,9 @@ async function loadBlogPosts() {
           ` : ''}
           <div class="blog-card-body">
             <div class="blog-meta">${date}</div>
-            <h3><a href="/blog-post.html?slug=${post.slug}">${escapeHtml(post.title)}</a></h3>
+            <h3><a href="blog-post.html?slug=${post.slug}">${escapeHtml(post.title)}</a></h3>
             <p class="blog-excerpt">${escapeHtml(post.description || post.content.substring(0, 150))}</p>
-            <a href="/blog-post.html?slug=${post.slug}" class="blog-read-more" data-i18n="blog_read_more">Читать статью</a>
+            <a href="blog-post.html?slug=${post.slug}" class="blog-read-more" data-i18n="blog_read_more">Читать статью</a>
           </div>
         `;
 

@@ -321,10 +321,18 @@ async function initBlogCarousel() {
 
   try {
     // Fetch blog posts
-    const response = await fetch('/posts-data.json');
-    const data = await response.json();
+    let data = null;
+    try {
+      const response = await fetch('./posts-data.json');
+      data = await response.json();
+    } catch(err) {
+      const localPosts = localStorage.getItem('scosag_posts');
+      if (localPosts) {
+        data = { success: true, data: JSON.parse(localPosts) };
+      }
+    }
 
-    if (data.success && data.data && data.data.length > 0) {
+    if (data && data.success && data.data && data.data.length > 0) {
       // Filter by language and published status, then get latest 6
       const posts = data.data
         .filter(p => p.lang === window.currentLang && p.published)

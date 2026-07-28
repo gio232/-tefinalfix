@@ -10,7 +10,7 @@ async function loadBlogPost() {
   const slug = params.get('slug');
 
   if (!slug) {
-    window.location.href = '/blog.html';
+    window.location.href = 'blog.html';
     return;
   }
 
@@ -18,11 +18,19 @@ async function loadBlogPost() {
     // Get current language from the page (set by script.js)
     const lang = window.currentLang || localStorage.getItem('scosag_lang') || 'ru';
 
-    // Fetch ALL posts from static JSON file
-    const response = await fetch('/posts-data.json');
-    const data = await response.json();
+    // Fetch ALL posts from static JSON file or localStorage
+    let data = null;
+    try {
+      const response = await fetch('./posts-data.json');
+      data = await response.json();
+    } catch (err) {
+      const localPosts = localStorage.getItem('scosag_posts');
+      if (localPosts) {
+        data = { success: true, data: JSON.parse(localPosts) };
+      }
+    }
 
-    if (data.success && data.data && data.data.length > 0) {
+    if (data && data.success && data.data && data.data.length > 0) {
       // Find post with matching slug and language
       let post = data.data.find(p => p.slug === slug && p.lang === lang);
 

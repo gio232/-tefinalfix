@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Админ Панель — Swiss Center Services AG</title>
-  <link rel="stylesheet" href="/admin-panel/admin.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
   <div class="admin-container">
@@ -17,7 +17,7 @@
         <form id="login">
           <div class="form-group">
             <label>Имя пользователя:</label>
-            <input type="text" id="username" placeholder="admin" required autocomplete="username">
+            <input type="text" id="username" placeholder="admin" value="admin" required autocomplete="username">
           </div>
 
           <div class="form-group">
@@ -26,8 +26,13 @@
           </div>
 
           <button type="submit" class="btn btn-primary btn-full">Войти</button>
-          <button type="button" class="btn btn-outline btn-full" style="margin-top: 8px;" onclick="showForgotPassword()">Забыл пароль?</button>
+          <button type="button" class="btn btn-outline btn-full" style="margin-top: 8px;" onclick="showForgotPassword()">Забыл пароль / Сменить пароль</button>
         </form>
+
+        <div style="margin-top: 14px; padding: 10px; background: #eef2f6; border-radius: 6px; font-size: 13px; color: #475569; text-align: center;">
+          💡 <strong>Данные для входа:</strong><br>
+          Логин: <code>admin</code> | Пароль: <code>admin123</code> (или <code>12345</code>)
+        </div>
 
         <div id="login-error" style="display: none; color: #d32f2f; margin-top: 16px; padding: 12px; background: #ffebee; border-radius: 4px;"></div>
       </div>
@@ -36,16 +41,21 @@
     <!-- Forgot Password Form -->
     <div id="forgot-password-form" class="auth-panel" style="display: none;">
       <div class="auth-card">
-        <h1>🔑 Восстановить пароль</h1>
+        <h1>🔑 Восстановление / Смена пароля</h1>
 
         <form id="forgot-form">
           <div class="form-group">
-            <label>Введи свое имя пользователя:</label>
-            <input type="text" id="reset-username" placeholder="admin" required>
+            <label>Имя пользователя:</label>
+            <input type="text" id="reset-username" placeholder="admin" value="admin" required>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-full">Отправить инструкции</button>
-          <button type="button" class="btn btn-outline btn-full" style="margin-top: 8px;" onclick="showLoginForm()">Назад</button>
+          <div class="form-group">
+            <label>Указать новый пароль (необязательно):</label>
+            <input type="password" id="new-password-input" placeholder="Введите новый пароль (если хотите сменить)">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">Показать / Сохранить пароль</button>
+          <button type="button" class="btn btn-outline btn-full" style="margin-top: 8px;" onclick="showLoginForm()">Назад к входу</button>
         </form>
 
         <div id="reset-error" style="display: none; margin-top: 16px; padding: 12px; background: #ffebee; border-radius: 4px; color: #d32f2f;"></div>
